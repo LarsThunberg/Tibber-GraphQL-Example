@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Tibber Query Example</title>
+  </head>
+  <body>Total price incl tax: <p id="price"></p>
+  Date and time: <p id="date"></p>
+    Date and time formatted: <p id="dateformatted"></p>
+    <script>
+      (async function () {
+        const data = JSON.stringify({
+          query: `{
+  viewer {
+    homes {
+      currentSubscription{
+        priceInfo{
+          current{
+            total
+            energy
+            tax
+            startsAt
+          }
+        }
+      }
+    }
+  }
+}`,
+        });
+
+        const response = await fetch(
+          'https://api.tibber.com/v1-beta/gql',
+          {
+            method: 'post',
+            body: data,
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': data.length,
+              Authorization:
+                'Bearer THE_API_KEY',
+            },
+          }
+        );
+
+        const responsedata = await response.json();
+        document.getElementById('price').innerHTML = responsedata.data.viewer.homes[0].currentSubscription.priceInfo.current.total;
+		document.getElementById('date').innerHTML = responsedata.data.viewer.homes[0].currentSubscription.priceInfo.current.startsAt;
+		const timestamp = Date.parse(responsedata.data.viewer.homes[0].currentSubscription.priceInfo.current.startsAt);
+		const parseddate = new Date(timestamp);
+		document.getElementById('dateformatted').innerHTML = "Kl " + parseddate.getHours(); 
+      })();
+    </script>
+  </body>
+</html>

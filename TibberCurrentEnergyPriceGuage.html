@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tibber current price</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+<script src="kuma-gauge.jquery.js"></script>
+<script>
+
+//Scripts
+setTimeout(function () 
+{
+
+//Script for getting price data from Tibbler with API token
+    (async function () {
+        const data = JSON.stringify({
+          query: `{
+				  viewer {
+					homes {
+					  currentSubscription{
+						priceInfo{
+						  current{
+							total
+							energy
+							tax
+							startsAt
+						  }
+						}
+					  }
+					}
+				  }
+				}`,
+        });
+
+        const response = await fetch(
+          'https://api.tibber.com/v1-beta/gql',
+          {
+            method: 'post',
+            body: data,
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': data.length,
+              Authorization:
+                'Bearer THE_API_KEY',
+            },
+          }
+        );
+
+		//Parse the data from the response
+        const responsedata = await response.json();
+        const price = responsedata.data.viewer.homes[0].currentSubscription.priceInfo.current.total;
+		const timestamp = Date.parse(responsedata.data.viewer.homes[0].currentSubscription.priceInfo.current.startsAt);
+		const parseddate = new Date(timestamp);
+		document.getElementById('dateformatted').innerHTML = "Kl " + parseddate.getHours() + ":00"; 
+	  
+		//Build the guage
+		$('.CurrentPriceGauge').kumaGauge(
+		{
+			value : price ,
+			valueEndText : ' kr',
+			min : 0,
+			max : 2,
+			fill : '0-#00bfff:0-#25cd6b:50-#e23131:80',
+			label : {
+				display : true,
+				left : '0',
+				right : '2',
+				fontFamily : 'Arial',
+				fontColor : '#000',				
+				fontSize : '18',
+				fontWeight : 'bold'				
+			}
+		});
+	})();
+},600);
+		
+</script>
+</head>
+<body>
+
+<!-- Present the price meter -->
+<div class="js-gauge CurrentPriceGauge gauge"></div>
+
+<!-- Present the current price hour -->
+<p id="dateformatted"></p>
+
+</body>
+</html>
