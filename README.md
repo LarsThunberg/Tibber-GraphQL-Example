@@ -15,3 +15,7 @@ Display current energy price as simple text.
 Display current energy price as a guage. Requires kuma-gauge.jquery.js
 
 ![image](https://user-images.githubusercontent.com/35871385/200847799-716b4902-268b-4ad5-ba08-dba3dde81981.png)
+
+## ReturnCurrentEnergyPriceFromTibber.php
+
+PHP example to run on server. Returns a formatted text of current energy price.
