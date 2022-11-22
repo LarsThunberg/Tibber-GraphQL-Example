@@ -1,6 +1,6 @@
 # Tibber-GraphQL-Example
-Some simple Client side JavaScript examples for [Tibber](https://tibber.com/) GraphQL calls without the need for a server. 
-<br>**Note!** As the API KEY is in plain text, this script should only be published on your local computer or local server behind a firewall, and not exposed to Internet.
+Some simple Server and Client side JavaScript/PHP examples for [Tibber](https://tibber.com/) GraphQL calls 
+<br>**Note!** As the API KEY is in plain text, the Javascript scripts should only be published on your local computer or local server behind a firewall, and not exposed to Internet.
 
 In all files replace THE_API_KEY with your personal Tibber API key.
 
